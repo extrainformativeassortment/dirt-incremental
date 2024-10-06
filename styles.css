@@ -1,0 +1,163 @@
+/*
+Made by Xia
+*/
+
+* {
+	/*border: 1px solid red;*/
+	margin: 0;
+	padding: 0;
+	user-select: none;
+}
+
+button:hover {
+	cursor: pointer;
+}
+
+body {
+	font-family: Verdana, sans-serif;
+	text-align: center;
+}
+
+body > header {
+	font-family: Georgia, serif;
+	padding: 2rem 0;
+}
+
+/*
+Stats
+*/
+
+#stats {
+	background-color: #DDD;
+	font-family: Georgia, serif;
+}
+
+#tick {
+	border: 2px solid #333;
+	width: 80%;
+	height: 2.5rem;
+	margin: auto;
+	font-size: 1.5em;
+	color: #333; /*#DDD*;*/
+}
+
+#tick p {
+	height: 70%;
+	overflow: hidden;
+}
+
+#tickFill {
+	height: 30%;
+	width: 100%;
+	background-color: #333;
+	transform-origin: left;
+	transform: scaleX(0);
+}
+
+/*
+Stats
+*/
+
+#stats {
+	margin-bottom: 1rem;
+}
+
+.stats {
+	display: none;
+}
+
+.basicDirtStat {
+	display: block;
+	background-color: #A21;
+}
+
+.rebirthDirtStat {
+	display: block;
+	background-color: #30B;
+}
+
+/* 
+Layers 
+*/
+
+#layers {
+	display: flex;
+	flex-direction: column;
+	font-family: Verdana, sans-serif;
+}
+
+.layers {
+	display: flex;
+	flex-direction: column;
+}
+
+.layers header {
+	flex-grow: 1;
+	align-content: center;
+	margin: auto;
+	padding: 0.5rem 0;
+	width: 100%;
+}
+
+.layers .upgradesContainers{
+	flex-grow: 4;
+	border-top: 1px solid black;
+}
+
+/*
+Dirt
+*/
+
+.upgradesContainers {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	text-align: left;
+	padding-left: 1rem;
+}
+
+.upgrades {
+	margin: 1rem 0;
+	display: table;
+}
+
+/*
+Basic
+*/
+
+#basicLayer {
+	background-color: #A21;
+}
+
+.basicUpgrades {
+	background-color: red;
+}
+
+/*
+Rebirth
+*/
+
+#rebirthLayer {
+	background-color: #30B;
+	/*display: none;*/
+}
+
+#rebirthLayer header {
+	/*visibility: hidden;*/
+}
+
+#rebirthButton {
+	width: 75%;
+	height: 4rem;
+	background-color: #33F;
+	font-size: 1.4em;
+}
+
+#rebirthLayer header details{
+	margin-top: 1rem;
+}
+
+#rebirthButton:hover{
+	background-color: #55F;
+	text-shadow: 1px 0;
+}
