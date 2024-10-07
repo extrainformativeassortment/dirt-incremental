@@ -9,6 +9,10 @@ Made by Xia
 	user-select: none;
 }
 
+button {
+	font-size: 1em;
+}
+
 button:hover {
 	cursor: pointer;
 }
@@ -37,6 +41,7 @@ Stats
 	width: 80%;
 	height: 2.5rem;
 	margin: auto;
+	margin-bottom: 1rem;
 	font-size: 1.5em;
 	color: #333; /*#DDD*;*/
 }
@@ -66,18 +71,23 @@ Stats
 	display: none;
 }
 
-.basicDirtStat {
+#basicDirtStat {
 	display: block;
 	background-color: #A21;
 }
 
-.rebirthDirtStat {
+#rebirthDirtStat {
 	display: block;
 	background-color: #30B;
 }
 
+#prestigeDirtStat {
+	display: block;
+	background-color: #45B;
+}
+
 /* 
-Layers 
+Layers & Layers Header
 */
 
 #layers {
@@ -91,34 +101,106 @@ Layers
 	flex-direction: column;
 }
 
-.layers header {
+.layersHeader {
 	flex-grow: 1;
-	align-content: center;
-	margin: auto;
-	padding: 0.5rem 0;
-	width: 100%;
+	padding: 1rem;
+	border-bottom: 2px solid black;
 }
 
-.layers .upgradesContainers{
-	flex-grow: 4;
-	border-top: 1px solid black;
+.resetButton {
+	width: 75%;
+	height: 4rem;
+	font-size: 1.4em;
+	box-shadow: 1px 1px #444;
+}
+
+.resetButton:hover {
+	border: 3px solid #EEE;
+	box-shadow: 4px 4px #444;
+}
+
+.resetButton:active {
+	transform: translate(1px, 1px);
+	box-shadow: 2px 2px #444;
+}
+
+.layersHeader details {
+	margin-top: 1rem;
+}
+
+.layersHeader details summary:hover {
+	cursor: pointer;
+}
+
+.layersHeader details p {
+	text-align: justify;
+	text-indent: 2em;
 }
 
 /*
-Dirt
+upgrades UI
 */
 
 .upgradesContainers {
+	flex-grow: 4;
+	
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
 	text-align: left;
-	padding-left: 1rem;
+	padding: 1rem;
+}
+
+.upgradesContainers ul {
+	margin: auto;
+}
+
+.upgradesContainers li {
+	width: 100%;
 }
 
 .upgrades {
+	margin: auto;
+	border: 1px transparent;
+	border-radius: 5px;
+	text-align: center;
+	border: 1px solid black;
 	margin: 1rem 0;
 	display: table;
+}
+
+.upgrades > header {
+	padding: 1rem;
+	border-bottom: 1px solid black;
+}
+
+.upgrades > main {
+	padding: 2rem;
+}
+
+.upgrades > footer {
+	display: grid;
+	grid-template-columns: auto auto;
+	height: 2rem;
+	border-top: 1px solid black;
+}
+
+.upgrades > footer > span {
+	margin: auto;
+}
+
+.upgrades > footer > button {
+	background-color: inherit;
+	border: 2px solid #BBB;
+	border-radius: 5px;
+}
+
+.upgrades > footer > button:hover {
+	box-shadow: 2px 2px #444;
+}
+
+.upgrades > footer > button:active {
+	transform: translate(1px, 1px);
 }
 
 /*
@@ -130,7 +212,11 @@ Basic
 }
 
 .basicUpgrades {
-	background-color: red;
+	background-color: #F00;
+}
+
+.basicUpgrades > footer > button:hover {
+	background-color: #F44;
 }
 
 /*
@@ -138,26 +224,124 @@ Rebirth
 */
 
 #rebirthLayer {
-	background-color: #30B;
+	background-color: #45B;
 	/*display: none;*/
 }
 
-#rebirthLayer header {
-	/*visibility: hidden;*/
+#rebirthLayer > header {
+	/*display: none;*/
 }
 
 #rebirthButton {
-	width: 75%;
-	height: 4rem;
-	background-color: #33F;
-	font-size: 1.4em;
-}
-
-#rebirthLayer header details{
-	margin-top: 1rem;
+	background-color: #32F;
 }
 
 #rebirthButton:hover{
 	background-color: #55F;
-	text-shadow: 1px 0;
+}
+
+.rebirthUpgrades {
+	background-color: #00F;
+}
+
+.rebirthUpgrades > footer > button:hover {
+	background-color: #44F;
+}
+
+/*
+Prestige
+*/
+
+#prestigeLayer {
+	background-color: #D83;
+	/*display: none;*/
+}
+
+#prestigeLayer > header {
+	/*display: none;*/
+}
+
+#prestigeButton {
+	background-color: #F93;
+}
+
+#prestigeButton:hover {
+	background-color: #FC6;
+}
+
+#prestigeTabs {
+	height: 2.5rem;
+}
+
+#prestigeTabs > ul{
+	display: flex;
+	list-style-type: none;
+	height: 100%;
+}
+
+#prestigeTabs li {
+	width: 100%;
+}
+
+#prestigeTabs button {
+	display: inline-block;
+	width: 100%;
+	height: 100%;
+	background-color: inherit;
+	border: none;
+}
+
+#prestigeTabs #prestigeTab1Button {
+	
+}
+
+#prestigeTab1Button:hover {
+	cursor: default;
+}
+
+#prestigeTab1Button:active {
+	
+}
+
+#prestigeTabs #prestigeTab2Button {
+	border-left: 1px solid black;
+	border-bottom: 2px solid black;
+}
+
+#prestigeTab2Button:hover {
+	transform: translateY(2px);
+	box-shadow: 0 4px #444;
+}
+
+#prestigeTab2Button:active {
+	transform: translateY(5px);
+	box-shadow: none;
+}
+
+/*
+Prestige Upgrades
+*/
+
+#prestigeTab1 {
+	display: none;
+}
+
+.prestigeUpgrades {
+	background-color: #F70;
+}
+
+.prestigeUpgrades > footer > button:hover {
+	background-color: #FA4;
+}
+
+/*
+Prestige Milestones
+*/
+
+#prestigeTab2 {
+	/*display: none;*/
+}
+
+#prestigeTab2 > header{
+	padding: 1rem;
 }

@@ -4,7 +4,69 @@ Made by Xia
 
 /*
 declaration
+
+syntax: 
+
+upgrade[category, type][level, effect, cost]
+category: 0 - value, 1 - dom Element
+ex: 
+
+upgrade[1, 1][1, 1, 4]
+refers to the content of dom element of basic dirt upgrade #2, with level 1, effect of 1 (dirt per click), which costs 4 (dirt) to upgrade to level 2;
+---
+types:
+0 - basic dirt
+1 - rebirth dirt
+2 - prestige dirt
+dirt[type]
+gain[type]
 */
+
+const dirt = new Array(3);
+for (let i = 0; i < dirt.length; i++) {
+	dirt[i] = 0;
+}
+
+class Upgrade{
+	constructor(...args) {
+		['type', 'level', 'effect', 'cost'].forEach((key, index) => {
+			this[key] = args[index];
+		});
+	}
+}
+
+const upgrades = {};
+
+for (let i = 1; i <= 12; i++) {
+	if (i <= 3){
+		const upgrades[`Upgrade${i}`] = new Upgrade(1, 1, 0, 0);
+	} 
+	else if (i <= 8){
+		const upgrades[`Upgrade${i}`] = new Upgrade(2, 1, 0, 0);
+	}
+	else {
+		const upgrades[`Upgrade${i}`] = new Upgrade(3, 1, 0, 0);
+	}
+}
+
+function Cost(id, lvl){
+	let cost = 0, nxtLvl = lvl + 2;
+	
+	switch (buttonId){
+		case 1:
+			cost = nxtLvl * nxtLvl - nxtLvl;
+			break;
+		case 2:
+			cost = (30 * nxtLvl) + nxtLvl * nxtLvl;
+			break;
+		case 3:
+			cost = (1000 * nxtLvl) + (nxtLvl * 100) + nxtLvl;
+			break;
+		default:
+			return;
+	}
+	return cost;
+}
 
 /*
 DOM Access
@@ -12,9 +74,9 @@ DOM Access
 
 const tickFill = document.getElementById("tickFill"); 
 
-const valDisplay = {};
+const tickspeed = document.getElementById("tickspeed");
 
-valDisplay["tickspeed"] = document.getElementById("tickspeed");
+const valDisplay = {};
 valDisplay["d000"] = document.getElementById("d000");
 let d000Display = valDisplay["d000"];
 
@@ -155,25 +217,6 @@ function effect(buttonId){
 	}
 }
 
-function Cost(buttonId, lvl){
-	let cost = 0, nxtLvl = lvl + 2;
-	
-	switch (buttonId){
-		case 1:
-			cost = nxtLvl * nxtLvl - nxtLvl;
-			break;
-		case 2:
-			cost = (30 * nxtLvl) + nxtLvl * nxtLvl;
-			break;
-		case 3:
-			cost = (1000 * nxtLvl) + (nxtLvl * 100) + nxtLvl;
-			break;
-		default:
-			return;
-	}
-	return cost;
-}
-
 /*
 utility functions; makes coding easier or an artefact of coding
 */
@@ -188,7 +231,7 @@ function OnUpgrade() {
 	d100 = effect["d001"];
 	valDisplay["d100"].innerHTML = d100;
 	tickspeed = truncate(4 - effect["d002"]);
-	valDisplay["tickspeed"].innerHTML = tickspeed;
+	tickspeed.innerHTML = tickspeed;
 }
 
 function rebirthReset() {
