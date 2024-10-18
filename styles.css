@@ -2,6 +2,10 @@
 Made by Xia
 */
 
+html {
+	scroll-behavior: smooth;
+}
+
 * {
 	/*border: 1px solid red;*/
 	margin: 0;
@@ -20,11 +24,21 @@ button:hover {
 body {
 	font-family: Verdana, sans-serif;
 	text-align: center;
+	margin: auto;
+	background-image: url("images/body-background.webp");
+	width: 80%;
+}
+
+@media only screen and (min-width: 600px) {
+	body {
+		width: 480px;
+	}
 }
 
 body > header {
 	font-family: Georgia, serif;
 	padding: 2rem 0;
+	background-color: #ca8;
 }
 
 /*
@@ -33,7 +47,10 @@ Stats
 
 #stats {
 	background-color: #DDD;
-	font-family: Georgia, serif;
+	position: sticky;
+	top: 0;
+	z-index: 1;
+	padding-top: 1rem;
 }
 
 #tick {
@@ -48,7 +65,7 @@ Stats
 
 #tick p {
 	height: 70%;
-	overflow: hidden;
+	font-family: Georgia, serif;
 }
 
 #tickFill {
@@ -60,15 +77,26 @@ Stats
 }
 
 /*
-Stats
+Dirt Count Stats
 */
 
-#stats {
-	margin-bottom: 1rem;
+#dirtStats {
+	display: flex;
+	justify-content: space-around;
+	list-style-type: none;
 }
 
 .stats {
 	display: none;
+	margin-bottom: 1rem;
+	padding: 0.5rem 0.5rem;
+	font-size: 1.2em;
+	color: #CCC;
+	letter-spacing: 0.2em;
+	font-weight: bold;
+	border: 2px solid black;
+	border-radius: 10px;
+	width: 28%;
 }
 
 #basicDirtStat {
@@ -77,13 +105,11 @@ Stats
 }
 
 #rebirthDirtStat {
-	display: block;
-	background-color: #30B;
+	background-color: #45B;
 }
 
 #prestigeDirtStat {
-	display: block;
-	background-color: #45B;
+	background-color: #D83;
 }
 
 /* 
@@ -107,19 +133,19 @@ Layers & Layers Header
 	border-bottom: 2px solid black;
 }
 
-.resetButton {
+.resetBtn {
 	width: 75%;
 	height: 4rem;
 	font-size: 1.4em;
 	box-shadow: 1px 1px #444;
 }
 
-.resetButton:hover {
+.resetBtn:hover {
 	border: 3px solid #EEE;
 	box-shadow: 4px 4px #444;
 }
 
-.resetButton:active {
+.resetBtn:active {
 	transform: translate(1px, 1px);
 	box-shadow: 2px 2px #444;
 }
@@ -147,7 +173,6 @@ upgrades UI
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
-	text-align: left;
 	padding: 1rem;
 }
 
@@ -166,7 +191,7 @@ upgrades UI
 	text-align: center;
 	border: 1px solid black;
 	margin: 1rem 0;
-	display: table;
+	display: none; 
 }
 
 .upgrades > header {
@@ -225,19 +250,34 @@ Rebirth
 
 #rebirthLayer {
 	background-color: #45B;
-	/*display: none;*/
+	display: none;
 }
 
 #rebirthLayer > header {
-	/*display: none;*/
+	
 }
 
-#rebirthButton {
+#rebirthLayerHeader {
+	display: none;
+}
+
+#preRebirthHeader {
+	padding: 1rem;
+	font-size: 1.5em;
+	font-weight: bold;
+	display: none;
+}
+
+#rebirthBtn {
 	background-color: #32F;
 }
 
-#rebirthButton:hover{
+#rebirthBtn:hover{
 	background-color: #55F;
+}
+
+#rebirthUpgrades {
+	/*display: none;*/
 }
 
 .rebirthUpgrades {
@@ -254,18 +294,18 @@ Prestige
 
 #prestigeLayer {
 	background-color: #D83;
-	/*display: none;*/
+	display: none;
 }
 
 #prestigeLayer > header {
-	/*display: none;*/
+	display: none;
 }
 
-#prestigeButton {
+#prestigeBtn {
 	background-color: #F93;
 }
 
-#prestigeButton:hover {
+#prestigeBtn:hover {
 	background-color: #FC6;
 }
 
@@ -291,29 +331,29 @@ Prestige
 	border: none;
 }
 
-#prestigeTabs #prestigeTab1Button {
+#prestigeTabs #prestigeTab1Btn {
 	
 }
 
-#prestigeTab1Button:hover {
+#prestigeTab1Btn:hover {
 	cursor: default;
 }
 
-#prestigeTab1Button:active {
+#prestigeTab1Btn:active {
 	
 }
 
-#prestigeTabs #prestigeTab2Button {
+#prestigeTabs #prestigeTab2Btn {
 	border-left: 1px solid black;
 	border-bottom: 2px solid black;
 }
 
-#prestigeTab2Button:hover {
+#prestigeTab2Btn:hover {
 	transform: translateY(2px);
 	box-shadow: 0 4px #444;
 }
 
-#prestigeTab2Button:active {
+#prestigeTab2Btn:active {
 	transform: translateY(5px);
 	box-shadow: none;
 }
@@ -339,7 +379,7 @@ Prestige Milestones
 */
 
 #prestigeTab2 {
-	/*display: none;*/
+	display: none;
 }
 
 #prestigeTab2 > header{

@@ -12,7 +12,8 @@ Dirt Incremental by Xia
     <link rel="icon" type="image/x-icon" href="">
     <link rel="stylesheet" href="styles.css">
 		<base target="_blank">
-		<script src="node_modules/localStorage/lib/localStorage.js"></script>
+		<!--<script src="node_modules/localStorage/lib/localStorage.js"></script>-->
+		<script src="node_modules/bignumber.js/bignumber.js"></script>
 </head>
 <body>
 	<header>
@@ -23,15 +24,24 @@ Dirt Incremental by Xia
 	<main>
 	
 		<section id="stats">
-			<h2>Stats</h2>
 			<div id="tick">
-			<p>Tickspeed: <span id="tickspeed">4</span> seconds</p>
-			<div id="tickFill"></div>
+				<p>Tickspeed: <span id="tickspeed"></span> seconds</p>
+				<div id="tickFill"></div>
 			</div>
-			<ul>
-			<li class="stats" id="basicDirtStat"><p>You have <span id="basicDirtCount">1</span> dirt</p></li>
-			<li class="stats" id="rebirthDirtStat"><p>You have <span id="rebirthDirtCount">0</span> rebirth dirt</p></li>
-			<li class="stats" id="prestigeDirtStat"><p>You have <span id="prestigeDirtCount">0</span> prestige dirt</p></li>
+			<ul id="dirtStats">
+				<li class="stats" id="basicDirtStat">
+					<h3>Dirt:</h3>
+					<span id="basicDirtCount"></span><br>
+					(+<span id="basicDirtPerTick"></span>/tick)
+				</li>
+				<li class="stats" id="rebirthDirtStat">
+					<h3>Rebirth dirt:</h3>
+					<span id="rebirthDirtCount"></span>
+				</li>
+				<li class="stats" id="prestigeDirtStat">
+					<h3>Prestige dirt:</h3>
+					<span id="prestigeDirtCount"></span>
+				</li>
 			</ul>
 		</section>
 		
@@ -40,7 +50,7 @@ Dirt Incremental by Xia
 			<section class="layers" id="basicLayer">
 			
 				<header class="layersHeader">
-					<p>You are earning <span id="dirtPerTick">0</span> dirt per tick</p>
+					<h2>Dirt Layer</h2>
 				</header>
 				
 				<section class="upgradesContainers" id="basicUpgrades"><ul>
@@ -48,39 +58,52 @@ Dirt Incremental by Xia
 					<li class="upgrades basicUpgrades" id="upgrade1">
 						<header>Dirt Upgrade #1</header>
 						<main>
-							<p>Dirt earned per tick: <span id="upgrade1Effect">0</span><br>
-							(+1 per level; x2 per 10 levels)
+							<p>Dirt earned per tick: <span id="upgrade1Effect"></span><br>
+							(+1 per level; x2 every 5 levels (applies retroactively))
 							</p>
 						</main>
 						<footer>
-							<span>Level: <span id="upgrade1Level">1</span></span>
-							<button id="upgrade1Button">Upgrade: <span id="upgrade1Cost">1</span> dirt</button>
+							<span>Level: <span id="upgrade1Level"></span></span>
+							<button id="upgrade1Btn">Upgrade: <span id="upgrade1Cost"></span> dirt</button>
 						</footer>
 					</li>
 					
 					<li class="upgrades basicUpgrades" id="upgrade2">
 						<header>Dirt Upgrade #2</header>
 						<main>
-							<p>Reduce tick duration by: -<span id="upgrade2Effect">0.00</span> seconds<br>
-							(-0.10 per level)
+							<p>Multiply dirt earned by: <span id="upgrade2Effect"></span><br>
+							(x10 per level)
 							</p>
 						</main>
 						<footer>
-							<span>Level: <span id="upgrade2Level">1</span></span>
-							<button id="upgrade2Button">Upgrade: <span id="upgrade2Cost">30</span> dirt</button>
+							<span>Level: <span id="upgrade2Level"></span></span>
+							<button id="upgrade2Btn">Upgrade: <span id="upgrade2Cost"></span> dirt</button>
 						</footer>
 					</li>
 					
 					<li class="upgrades basicUpgrades" id="upgrade3">
 						<header>Dirt Upgrade #3</header>
 						<main>
-							<p>Rebirth dirt gained: x<span id="upgrade3Effect">1.00</span><br>
-							(+1 per level)
+							<p>Reduce tick duration by: <span id="upgrade3Effect"></span> seconds<br>
+							(+0.20 per level)
 							</p>
 						</main>
 						<footer>
-							<span>Level: <span id="upgrade3Level">1</span></span>
-							<button id="upgrade3Button">Upgrade: <span id="upgrade3Cost">1000</span> dirt</button>
+							<span>Level: <span id="upgrade3Level"></span></span>
+							<button id="upgrade3Btn">Upgrade: <span id="upgrade3Cost"></span> dirt</button>
+						</footer>
+					</li>
+					
+					<li class="upgrades basicUpgrades" id="upgrade4">
+						<header>Dirt Upgrade #4</header>
+						<main>
+							<p>Rebirth dirt gained: x<span id="upgrade4Effect"></span><br>
+							(x2 per level)
+							</p>
+						</main>
+						<footer>
+							<span>Level: <span id="upgrade4Level"></span></span>
+							<button id="upgrade4Btn">Upgrade: <span id="upgrade4Cost"></span> dirt</button>
 						</footer>
 					</li>
 					
@@ -90,66 +113,72 @@ Dirt Incremental by Xia
 			<section class="layers" id="rebirthLayer">
 			
 				<header class="layersHeader">
-					<button class="resetButton" id="rebirthButton">Rebirth for <span id="rebirthOnReset">0</span> rebirth dirt</button><br>
-					<details>
-						<summary><small>Rebirth reset info</small></summary>
-						<p><small>Rebirth resets dirt and dirt upgrades.
-						In turn, you will earn rebirth dirt for rebirth upgrades.</small></p>
-					</details>
+					<h2>Rebirth Layer</h2>
+					<div id="rebirthLayerHeader">
+						<button class="resetBtn" id="rebirthBtn">Rebirth for <span id="rebirthDirtOnReset"></span> rebirth dirt</button><br>
+						<details>
+							<summary><small>Rebirth reset info</small></summary>
+							<p><small>Rebirth resets dirt and dirt upgrades.
+							In turn, you will earn rebirth dirt for rebirth upgrades.</small></p>
+						</details>
+					</div>
+					<div id="preRebirthHeader">
+						Rebirth unlocks at 1e+6 dirt
+					</div>
 				</header>
 				
 				
 				<section class="upgradesContainers" id="rebirthUpgrades"><ul>
 				
-					<li class="upgrades rebirthUpgrades" id="upgrade4">
+					<li class="upgrades rebirthUpgrades" id="upgrade5">
 						<header>Rebirth Dirt Upgrade #1</header>
 						<main>
-							<p>Dirt earned per tick: x<span id="upgrade4Effect">1.00</span><br>
-							(+1 per level; x2 per 10 levels)
-							</p>
-						</main>
-						<footer>
-							<span>Level: <span id="upgrade4Level">1</span></span>
-							<button id="upgrade4Button">Upgrade: <span id="upgrade4Cost">1</span> rebirth dirt</button>
-						</footer>
-					</li>
-				
-					<li class="upgrades rebirthUpgrades" id="upgrade5">
-						<header>Rebirth Dirt Upgrade #2</header>
-						<main>
-							<p>Reduce tick duration by: <span id="upgrade5Effect">0.00</span> seconds<br>
-							(+0.10 per level)
-							</p>
-						</main>
-						<footer>
-							<span>Level: <span id="upgrade5Level">1</span></span>
-							<button id="upgrade5Button">Upgrade: <span id="upgrade5Cost">5</span> rebirth dirt</button>
-						</footer>
-					</li>
-					
-					<li class="upgrades rebirthUpgrades" id="upgrade6">
-						<header>Rebirth Dirt Upgrade #3</header>
-						<main>
-							<p>Rebirth dirt gained: x<span id="upgrade6Effect">1.00</span><br>
+							<p>Multiply dirt earned per tick by: <span id="upgrade5Effect"></span><br>
 							(x2 per level)
 							</p>
 						</main>
 						<footer>
-							<span>Level: <span id="upgrade5Level">1</span></span>
-							<button id="upgrade6Button">Upgrade: <span id="upgrade6Cost">100</span> rebirth dirt</button>
+							<span>Level: <span id="upgrade5Level"></span></span>
+							<button id="upgrade5Btn">Upgrade: <span id="upgrade5Cost"></span> rebirth dirt</button>
+						</footer>
+					</li>
+				
+					<li class="upgrades rebirthUpgrades" id="upgrade6">
+						<header>Rebirth Dirt Upgrade #2</header>
+						<main>
+							<p>Reduce tick duration by: <span id="upgrade6Effect"></span> seconds<br>
+							(+0.10 per level)
+							</p>
+						</main>
+						<footer>
+							<span>Level: <span id="upgrade6Level"></span></span>
+							<button id="upgrade6Btn">Upgrade: <span id="upgrade6Cost"></span> rebirth dirt</button>
 						</footer>
 					</li>
 					
 					<li class="upgrades rebirthUpgrades" id="upgrade7">
+						<header>Rebirth Dirt Upgrade #3</header>
+						<main>
+							<p>Rebirth dirt gained: x<span id="upgrade7Effect"></span><br>
+							(+1 per level)
+							</p>
+						</main>
+						<footer>
+							<span>Level: <span id="upgrade7Level"></span></span>
+							<button id="upgrade7Btn">Upgrade: <span id="upgrade7Cost"></span> rebirth dirt</button>
+						</footer>
+					</li>
+					
+					<li class="upgrades rebirthUpgrades" id="upgrade8">
 						<header>Rebirth Dirt Upgrade #4</header>
 						<main>
-							<p>Prestige dirt gained on prestige: <span id="upgrade7Effect">1.00</span><br>
+							<p>Prestige dirt gained on prestige: <span id="upgrade8Effect"></span><br>
 							(+1 per level, x2 per 10 levels)
 							</p>
 						</main>
 						<footer>
-							<span>Level: <span id="upgrade7Level">1</span></span>
-							<button id="upgrade7Button">Upgrade: <span id="upgrade7Cost">1000</span> rebirth dirt</button>
+							<span>Level: <span id="upgrade8Level"></span></span>
+							<button id="upgrade8Btn">Upgrade: <span id="upgrade8Cost"></span> rebirth dirt</button>
 						</footer>
 					</li>
 					
@@ -158,7 +187,7 @@ Dirt Incremental by Xia
 			
 			<section class="layers" id="prestigeLayer">
 				<header class="layersHeader">
-					<button class="resetButton" id="prestigeButton">Prestige for <span id="prestigeOnReset">0</span> prestige dirt</button><br>
+					<button class="resetBtn" id="prestigeBtn">Prestige for <span id="prestigeDirtOnReset"></span> prestige dirt</button><br>
 					<details>
 						<summary><small>Prestige reset info</small></summary>
 						<p><small>Prestige resets everything rebirth resets, plus rebirth dirt and rebirth upgrades.
@@ -167,49 +196,49 @@ Dirt Incremental by Xia
 				</header>
 				
 				<nav id="prestigeTabs"><ul>
-					<li><button id="prestigeTab1Button">Upgrades</button></li>
-					<li><button id="prestigeTab2Button">Milestones</button></li>
+					<li><button id="prestigeTab1Btn">Upgrades</button></li>
+					<li><button id="prestigeTab2Btn">Milestones</button></li>
 				</ul></nav>
 					
 				<section id="prestigeTab1">
 					<section class="upgradesContainers" id="prestigeUpgrades"><ul>
 					
-						<li class="upgrades prestigeUpgrades" id="upgrade8">
+						<li class="upgrades prestigeUpgrades" id="upgrade9">
 							<header>Prestige Dirt Upgrade #1</header>
 							<main>
-								<p>Dirt earned per tick: ^<span id="upgrade8Effect">1.00</span><br>
-								(x2 per level)
+								<p>Dirt earned per tick: ^<span id="upgrade9Effect"></span><br>
+								(+1 per level)
 								</p>
 							</main>
 							<footer>
-								<span>Level: <span id="upgrade8Level">1</span></span>
-								<button id="upgrade8Button">Upgrade: <span id="upgrade8Cost">1</span> prestige dirt</button>
-							</footer>
-						</li>
-						
-						<li class="upgrades prestigeUpgrades" id="upgrade9">
-							<header>Prestige Dirt Upgrade #2</header>
-							<main>
-								<p>Rebirth dirt gained: ^<span id="upgrade9Effect">1.00</span><br>
-								(x2 per level)
-								</p>
-							</main>
-							<footer>
-								<span>Level: <span id="upgrade9Level">1</span></span>
-								<button id="upgrade9Button">Upgrade: <span id="upgrade9Cost">1</span> prestige dirt</button>
+								<span>Level: <span id="upgrade9Level"></span></span>
+								<button id="upgrade9Btn">Upgrade: <span id="upgrade9Cost"></span> prestige dirt</button>
 							</footer>
 						</li>
 						
 						<li class="upgrades prestigeUpgrades" id="upgrade10">
-							<header>Prestige Dirt Upgrade #3</header>
+							<header>Prestige Dirt Upgrade #2</header>
 							<main>
-								<p>Reduce tick duration by: <span id="upgrade10Effect">0.00</span> seconds<br>
-								(+0.10 per level)
+								<p>Rebirth dirt gained: ^<span id="upgrade10Effect"></span><br>
+								(x2 per level)
 								</p>
 							</main>
 							<footer>
-								<span>Level: <span id="upgrade10Level">1</span></span>
-								<button id="upgrade10Button">Upgrade: <span id="upgrade10Cost">1</span> prestige dirt</button>
+								<span>Level: <span id="upgrade10Level"></span></span>
+								<button id="upgrade10Btn">Upgrade: <span id="upgrade10Cost"></span> prestige dirt</button>
+							</footer>
+						</li>
+						
+						<li class="upgrades prestigeUpgrades" id="upgrade11">
+							<header>Prestige Dirt Upgrade #3</header>
+							<main>
+								<p>Reduce tick duration by: <span id="upgrade11Effect"></span> seconds<br>
+								(+0.05 per level)
+								</p>
+							</main>
+							<footer>
+								<span>Level: <span id="upgrade11Level"></span></span>
+								<button id="upgrade11Btn">Upgrade: <span id="upgrade11Cost"></span> prestige dirt</button>
 							</footer>
 						</li>
 						
@@ -219,15 +248,19 @@ Dirt Incremental by Xia
 				<section id="prestigeTab2">
 					<header>
 						<h3>Prestige Milestones:</h3>
-						<h4>You have done <span id="prestigeCount">0</span> prestiges</h4>
+						<h4>You have done <span id="prestigeCount"></span> prestiges</h4>
 					</header>
 					
 					<section id="prestigeMilestones"><ul>
-					<li>1 prestige:<br>Dirt upgrades no longer spends dirt</li>
-					<li>2 prestiges:<br>Unlock autobuyer for dirt upgrade #1</li>
-					<li>3 prestiges:<br>Unlock autobuyer for dirt upgrade #2</li>
-					<li>4 prestiges:<br>Unlock autobuyer for dirt upgrade #3</li>
-					<li>5 prestiges:<br>Automatically gain 1% of rebirth earned per second</li> <!--add more-->
+					<li>1 prestige:<br>x2 rebirth points</li>
+					<li>2 prestige:<br>Dirt upgrades no longer spends dirt</li>
+					<li>3 prestiges:<br>Rebirth no longer resets Dirt Upgrade #2</li>
+					<li>5 prestiges:<br>Rebirth no longer resets Dirt Upgrade #2</li>
+					<li>8 prestiges:<br>Dirt upgrade #2 no longer resets on rebirth</li>
+					<li>11 prestiges:<br></li>
+					<li>15 prestiges:<br>Unlock autobuyer for rebirth upgrades</li>
+					<li>26 prestiges:<br>Tick is reduced by 0.01s per prestige starting this one; stacks up to 25x</li>
+					<li>50 prestiges:<br>Unlock autobuyer for rebirth upgrades</li>
 					</ul></section>
 				</section>
 				
