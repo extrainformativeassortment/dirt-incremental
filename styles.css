@@ -13,6 +13,11 @@ html {
 	user-select: none;
 }
 
+a {
+	text-decoration: underline;
+	color: #fab;
+}
+
 button {
 	font-size: 1em;
 }
@@ -38,7 +43,7 @@ body {
 body > header {
 	font-family: Georgia, serif;
 	padding: 2rem 0;
-	background-color: #ca8;
+	background-color: #834;
 }
 
 /*
@@ -89,8 +94,8 @@ Dirt Count Stats
 .stats {
 	display: none;
 	margin-bottom: 1rem;
-	padding: 0.5rem 0.5rem;
-	font-size: 1.2em;
+	padding: 0.5rem 0.2rem;
+	font-size: 0.8em;
 	color: #CCC;
 	letter-spacing: 0.2em;
 	font-weight: bold;

@@ -32,11 +32,12 @@ for (let i = 1; i < dirtCount.length; i++) {
 	dirtCount[i] = 0;
 }
 
-dirtCount[0] = 1000000;
-dirtCount[1] = 5;
+dirtCount[0] = 1;
+dirtCount[1] = 0;
 
 let basicDirtPerTick = 0;
 let rebirthDirtOnReset = 0; 
+let scrolledToRebirthInfo = false;
 let prestigeDirtOnReset = 0;
 
 const lastBasicUpgradeId = 4;
@@ -131,23 +132,26 @@ function totalTickspeedEffect() {
 
 function updateTickspeed() {
 	tickspeed = 4 - totalTickspeedEffect();
-	tickspeed /= 4;
-	tickspeed = truncate(tickspeed);
+	tickspeed = truncate(tickspeed, 3);
 	tickspeedDOM.innerHTML = truncate(tickspeed, "tickspeedDOM");
 }
 
 function updateDirtCount(type) {
 	if (type == 0) {
 		if (dirtCount[0] >= 10000) {
-			document.getElementById("rebirthLayer").style.display = "block";
-			document.getElementById("preRebirthHeader").style.display = "block";
+			if (scrolledToRebirthInfo == false) {
+				scrolledToRebirthInfo = true;
+				updateDisplay("rebirthLayer", "show", "move");
+			}
+			updateDisplay("rebirthLayer", "show");
+			updateDisplay("preRebirthHeader", "show");
 		}
 		if (dirtCount[0] >= 1000000) {
-			document.getElementById("preRebirthHeader").style.display = "none";
-			document.getElementById("rebirthLayerHeader").style.display = "block";
+			updateDisplay("preRebirthHeader", "hide");
+			updateDisplay("rebirthLayerHeader", "show");
 		}
 		if (dirtCount[0] < 1000000) {
-			document.getElementById("rebirthLayerHeader").style.display = "none";
+			updateDisplay("rebirthLayerHeader", "hide");
 		}
 	}
 	dirtCountDOM[type].innerHTML = scientificNotationate(dirtCount[type]);
@@ -165,8 +169,7 @@ function updateBasicDirtPerTick() {
 
 function rebirthDirtOnResetBaseFormula() {
 	const i = dirtCount[0];
-	let x = divBig(i, 1000000); 
-	return x.log().div(BigNumber(Math.LN10));
+	return divBig(i, 1000000).sqrt().sqrt(); 
 }
 
 function updateRebirthDirtOnReset() {
@@ -214,7 +217,7 @@ function updateUpgradeDisplay(id, displayStatus, moveTo) {
 	}
 }
 
-function updateDisplay(id, displayStatus, moveTo = "move") {
+function updateDisplay(id, displayStatus, moveTo = "stay") {
 	if (typeof id == "number") {
 		updateUpgradeDisplay(id, displayStatus, moveTo);
 		return;
@@ -271,10 +274,6 @@ function calculateEffect(id, lvl) {
 	return truncate(effectFormulas[id]);
 }
 
-function costFormulaBaseExponent (lvl, scaleFactor) {
-	return powBig(scaleFactor, lvl); //1 + Math.floor(lvl / jumpEveryXLevels) * scaleFactor;
-}
-
 function costFormulaScalingBase (lvl, jumpEveryXLevels, initialScaleFactor) {
 	return BigNumber(1 + (initialScaleFactor * Math.floor(lvl / jumpEveryXLevels)));
 }
@@ -310,11 +309,11 @@ function calculateCost(id, lvl){
 	const nxtLvl = lvl + 1;
 	
 	const costFormulas = {
-		1: timesBig(nxtLvl, powBig(1.2, lvl), costFormulaScaling(lvl, 5, 0.8, 1.2)),
-		2: timesBig(nxtLvl, powBig(18, lvl), 500), 
-		3: timesBig(nxtLvl, powBig(12, lvl), 10000), //* costFormulaScaling(lvl, 5, 16),
-		4: timesBig(nxtLvl, powBig(1.28, lvl), 1e8), // * costFormulaScaling(lvl, undefined, 0.02, 0.04),
-		5: (lvl * 3 + lvl * 0.06) ** 1.33 * costFormulaScaling(lvl, 5, 2, 0.08),
+		1: timesBig(nxtLvl, powBig(1.12, lvl), costFormulaScaling(lvl, 5, 0.8, 1)),
+		2: timesBig(nxtLvl, powBig(12 + 2 * lvl, lvl), 500), 
+		3: timesBig(nxtLvl, powBig(10 + 8 * lvl, lvl), 10000),
+		4: timesBig(nxtLvl, powBig(timesBig(1.08e5, powBig(1e3, lvl)), lvl), 1e8), // * costFormulaScaling(lvl, undefined, 0.02, 0.04),
+		5: timesBig(nxtLvl, powBig(2.2 + 2 * lvl, lvl)),
 		6: ((1 + lvl) * 2 + lvl * 1.2) ** 1.66 * costFormulaScaling(lvl, 5, 10),
 		7: (lvl * 3 + lvl * 0.06) ** 1.33 * costFormulaScaling(lvl, 5, 2, 0.08),
 		8: (lvl * 3 + lvl * 0.06) ** 1.33 * costFormulaScaling(lvl, 5, 2, 0.08),
@@ -374,8 +373,11 @@ reset functions
 */
 
 function resetBasicDirtUpgrades() {
-	for (let i = 1; i <= 3; i++){
+	for (let i = 1; i <= 4; i++){
 		upgrades[i].Level = 0;
+		if (i != 1 && i != 4) {
+			updateDisplay(i, "hide");
+		}
 		updateAllStats();
 	}
 	dirtCount[0] = 1;
@@ -492,7 +494,7 @@ function scientificNotationate(number) {
 }
 
 function timesBig(...addends) {
-    return addends.reduce((acc, addend) => acc.plus(addend), BigNumber(1));
+    return addends.reduce((acc, addend) => acc.plus(addend), BigNumber(0));
 }
 
 function minusBig(minuend, subtrahend) {
